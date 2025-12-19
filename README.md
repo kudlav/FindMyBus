@@ -3,7 +3,10 @@
 <h1 align="center">FindMyBus</h1>
 <p align="center">
     FindMyBus is an open-source Android application that allows you to view public transport vehicles positions on a map in real time. <br>
-    Built with <a href="https://svelte.dev/">Svelte</a>, <a href="https://konstaui.com/">KonstaUI</a> and <a href="https://capacitorjs.com/">Capacitor</a>.
+    Built with <a href="https://svelte.dev/">Svelte</a>, <a href="https://konstaui.com/">KonstaUI</a> and <a href="https://capacitorjs.com/">Capacitor</a>. <br>
+    <a href="https://f-droid.org/en/packages/com.jakubhlavacek.gtfsrealtimemap/">
+      <img alt="Get it on F-Droid" src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" height="75">
+    </a>
 </p>
 
 # Features
@@ -12,8 +15,9 @@
 - Light data usage
 
 ## Installation
-- Download and install an `.apk` file from the [Releases](https://github.com/TriLinder/FindMyBus/releases/latest) page
-- Alternatively, you can build the app from source (see below)
+- Install the app and keep it up to date through [F-Droid](https://f-droid.org/en/packages/com.jakubhlavacek.gtfsrealtimemap/)
+- Or, download and install an `.apk` file from the [Releases](https://github.com/TriLinder/FindMyBus/releases/latest) page
+- Alternatively, you can build the app from source yourself (see below)
 
 # Screenshots
 <p align="center">
