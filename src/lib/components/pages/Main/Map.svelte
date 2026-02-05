@@ -22,7 +22,8 @@
     const stopMarkers: Record<string, L.Marker> = {};
     const vehicleMarkers: Record<string, L.Marker> = {};
 
-    let higlightMarker: L.CircleMarker | undefined = undefined;
+    let higlightMarker: L.CircleMarker | undefined;
+    let tripPolyline: L.Polyline | undefined;
 
     let selectedVehicle: Vehicle;
     const stopTimesDialogOpen = writable<boolean>(false);
@@ -101,6 +102,7 @@
                 const marker = L.marker([0, 0], {interactive: true}).addTo(map);
                 marker.bindPopup('<div id="vehicle-popup" style="width: 300px;"></div>', {autoPan: false});
                 marker.addEventListener("popupopen", function() {onVehiclePopupClick(vehicle)});
+                marker.addEventListener("popupclose", function() {clearTripPolyline()});
 
                 // Try to use the vehicle's route short name as a label, otherwise
                 // leave it empty
@@ -193,6 +195,20 @@
         // Zoom the user in at least a little bit if they aren't zoomed-in yet
         if (map.getZoom() < 13) {
             map.setZoom(13);
+        }
+    }
+
+    function drawTripPolyline(trip: { locations: Location[], color: string }) {
+        const coords: L.LatLngTuple[] = trip.locations.map(stop => [stop.latitude, stop.longitude]);
+        const color = adjustHexColorBrightness(trip.color, $settingsStore.vehicleMarkerBackgroundBrightness);
+        tripPolyline = L.polyline(coords, { color, weight: 4, opacity: 0.8 }).addTo(map);
+    }
+
+    function clearTripPolyline() {
+        console.log("Clearing trip polyline");
+        if (tripPolyline) {
+            map.removeLayer(tripPolyline);
+            tripPolyline = undefined;
         }
     }
 
@@ -313,7 +329,7 @@
     <div id="vehicle-popup-template">
         {#if selectedVehicle}
             {#key selectedVehicle}
-                <VehiclePopup vehicle={selectedVehicle}/>
+                <VehiclePopup vehicle={selectedVehicle} drawTrip={function(trip) {drawTripPolyline(trip)}}/>
             {/key}
         {:else}
             {$_("map.errors.failedToGeneratePopupContent")}

@@ -4,7 +4,7 @@
     import { staticGtfsDataStore } from "../../../../stores";
     import { parseStopTimeStringToLocalTimezoneToday, speedInUsersPreferredUnitsString } from "$lib/utils";
     import { getStopTimesForTrip } from "$lib/gtfs/get";
-    import type { Vehicle, Stop, Trip, Route, StopTimes } from "$lib/gtfs/types";
+    import type { Vehicle, Stop, Trip, Route, StopTimes, Location } from "$lib/gtfs/types";
 
     import { Button } from "konsta/svelte";
     import Icon from "svelte-awesome";
@@ -20,6 +20,7 @@
     import road from 'svelte-awesome/icons/road';
 
     export let vehicle: Vehicle;
+    export let drawTrip: (trip: { locations: Location[], color: string }) => void;
 
     let trip: Trip;
     let route: Route;
@@ -66,6 +67,12 @@
         // Get colors for the short route name tag
         genericColor = '#' + (route.color.generic || '000000');
         textColor = '#' + (route.color.text || 'ffffff');
+
+        // Draw trip on the map
+        drawTrip({
+            locations: stopTimes.map((stop) => $staticGtfsDataStore.stops[stop.stopId]?.location).filter(Boolean),
+            color: genericColor,
+        });
 
         // Get the vehicle's current stop
         currentStop = $staticGtfsDataStore.stops[vehicle.currentStopId!] || null;
