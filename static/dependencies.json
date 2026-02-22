@@ -1,17 +1,17 @@
 [
   {
     "name": "@capacitor-community/safe-area",
-    "version": "7.0.0",
+    "version": "8.0.1",
     "license": "MIT"
   },
   {
     "name": "@capacitor/android",
-    "version": "7.4.2",
+    "version": "8.1.0",
     "license": "MIT"
   },
   {
     "name": "@capacitor/app",
-    "version": "7.0.1",
+    "version": "8.0.1",
     "license": "MIT"
   },
   {
@@ -21,42 +21,42 @@
   },
   {
     "name": "@capacitor/cli",
-    "version": "7.2.0",
+    "version": "8.1.0",
     "license": "MIT"
   },
   {
     "name": "@capacitor/core",
-    "version": "7.4.2",
+    "version": "8.1.0",
     "license": "MIT"
   },
   {
     "name": "@capacitor/filesystem",
-    "version": "7.1.3",
+    "version": "8.1.2",
     "license": "MIT"
   },
   {
     "name": "@capacitor/preferences",
-    "version": "7.0.1",
+    "version": "8.0.1",
     "license": "MIT"
   },
   {
     "name": "@fontsource/roboto",
-    "version": "5.2.6",
+    "version": "5.2.10",
     "license": "OFL-1.1"
   },
   {
     "name": "@sveltejs/adapter-static",
-    "version": "3.0.8",
+    "version": "3.0.10",
     "license": "MIT"
   },
   {
     "name": "@sveltejs/kit",
-    "version": "2.25.1",
+    "version": "2.53.0",
     "license": "MIT"
   },
   {
     "name": "@sveltejs/vite-plugin-svelte",
-    "version": "5.0.3",
+    "version": "5.1.1",
     "license": "MIT"
   },
   {
@@ -66,22 +66,22 @@
   },
   {
     "name": "@types/leaflet",
-    "version": "1.9.20",
+    "version": "1.9.21",
     "license": "MIT"
   },
   {
     "name": "@types/papaparse",
-    "version": "5.3.16",
+    "version": "5.5.2",
     "license": "MIT"
   },
   {
     "name": "autoprefixer",
-    "version": "10.4.21",
+    "version": "10.4.24",
     "license": "MIT"
   },
   {
     "name": "canvas-confetti",
-    "version": "1.9.3",
+    "version": "1.9.4",
     "license": "ISC"
   },
   {
@@ -105,7 +105,7 @@
   },
   {
     "name": "leaflet.locatecontrol",
-    "version": "0.84.2",
+    "version": "0.88.0",
     "license": "MIT"
   },
   {
@@ -120,7 +120,7 @@
   },
   {
     "name": "svelte",
-    "version": "5.33.11",
+    "version": "5.53.2",
     "license": "MIT"
   },
   {
@@ -135,7 +135,7 @@
   },
   {
     "name": "svelte-check",
-    "version": "4.2.1",
+    "version": "4.4.3",
     "license": "MIT"
   },
   {
@@ -145,17 +145,17 @@
   },
   {
     "name": "tailwindcss",
-    "version": "3.4.17",
+    "version": "3.4.19",
     "license": "MIT"
   },
   {
     "name": "typescript",
-    "version": "5.8.3",
+    "version": "5.9.3",
     "license": "Apache-2.0"
   },
   {
     "name": "vite",
-    "version": "6.3.5",
+    "version": "6.4.1",
     "license": "MIT"
   }
 ]
