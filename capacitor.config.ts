@@ -1,7 +1,7 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.jakubhlavacek.gtfsrealtimemap',
+  appId: 'cz.kudlav.gtfsrealtimemap',
   appName: 'FindMyBus',
   webDir: 'build',
   plugins: {

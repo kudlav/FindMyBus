@@ -1,4 +1,4 @@
-package com.jakubhlavacek.gtfsrealtimemap;
+package cz.kudlav.gtfsrealtimemap;
 
 import android.os.Bundle;
 

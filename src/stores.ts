@@ -63,7 +63,7 @@ export const realtimeGtfsDataStore = writable<RealtimeGtfsData>({
 });
 
 export const settingsStore = objectStore<Settings>({
-    storeName: 'com.jakubhlavacek.gtfsrealtimemap.settings',
+    storeName: 'cz.kudlav.gtfsrealtimemap.settings',
     initialValue: {
         dataTypeVersion: 0,
         staticGtfsUrl: '',
@@ -82,7 +82,7 @@ export const settingsStore = objectStore<Settings>({
 });
 
 export const mapPositionStore = objectStore<MapPosition>({
-    storeName: "com.jakubhlavacek.gtfsrealtimemap.mapPositionStore",
+    storeName: "cz.kudlav.gtfsrealtimemap.mapPositionStore",
     initialValue: {
         dataTypeVersion: 0,
         location: L.latLng([50.0869250, 14.4207550]),
@@ -92,7 +92,7 @@ export const mapPositionStore = objectStore<MapPosition>({
 });
 
 export const finishedInteractionsStore = arrayStore<('onboarding')[]>({
-    storeName: "com.jakubhlavacek.gtfsrealtimemap.finishedInteractions",
+    storeName: "cz.kudlav.gtfsrealtimemap.finishedInteractions",
     initialValue: [],
     persist: true
 });

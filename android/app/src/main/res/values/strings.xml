@@ -2,6 +2,6 @@
 <resources>
     <string name="app_name">FindMyBus</string>
     <string name="title_activity_main">FindMyBus</string>
-    <string name="package_name">com.jakubhlavacek.gtfsrealtimemap</string>
-    <string name="custom_url_scheme">com.jakubhlavacek.gtfsrealtimemap</string>
+    <string name="package_name">cz.kudlav.gtfsrealtimemap</string>
+    <string name="custom_url_scheme">cz.kudlav.gtfsrealtimemap</string>
 </resources>
