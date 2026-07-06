@@ -23,7 +23,7 @@
     const vehicleMarkers: Record<string, L.Marker> = {};
 
     let higlightMarker: L.CircleMarker | undefined;
-    let tripPolyline: L.Polyline | undefined;
+    let tripOverlay = L.layerGroup([]);
 
     let selectedVehicle: Vehicle;
     const stopTimesDialogOpen = writable<boolean>(false);
@@ -101,8 +101,8 @@
             if (!Object.keys(vehicleMarkers).includes(vehicle.id)) {
                 const marker = L.marker([0, 0], {interactive: true}).addTo(map);
                 marker.bindPopup('<div id="vehicle-popup" style="width: 300px;"></div>', {autoPan: false});
-                marker.addEventListener("popupopen", function() {onVehiclePopupClick(vehicle)});
-                marker.addEventListener("popupclose", function() {clearTripPolyline()});
+                marker.addEventListener("popupopen", function() { onVehiclePopupClick(vehicle) });
+                marker.addEventListener("popupclose", function() { tripOverlay.clearLayers() });
 
                 // Try to use the vehicle's route short name as a label, otherwise
                 // leave it empty
@@ -199,17 +199,12 @@
     }
 
     function drawTripPolyline(trip: { locations: Location[], color: string }) {
-        const coords: L.LatLngTuple[] = trip.locations.map(stop => [stop.latitude, stop.longitude]);
         const color = adjustHexColorBrightness(trip.color, $settingsStore.vehicleMarkerBackgroundBrightness);
-        tripPolyline = L.polyline(coords, { color, weight: 4, opacity: 0.8 }).addTo(map);
-    }
-
-    function clearTripPolyline() {
-        console.log("Clearing trip polyline");
-        if (tripPolyline) {
-            map.removeLayer(tripPolyline);
-            tripPolyline = undefined;
-        }
+        const coords = trip.locations.map((stop): L.LatLngTuple => [stop.latitude, stop.longitude]);
+        L.polyline(coords, { color, weight: 4, opacity: 0.8, interactive: false }).addTo(tripOverlay);
+        coords.forEach((coord) =>
+            L.circleMarker(coord, { radius: 6, color, fillOpacity: 1, fillColor: "#FFFFFF", weight: 3, interactive: false }).addTo(tripOverlay)
+        );
     }
 
     function onMapInteraction() {
@@ -256,6 +251,7 @@
             maxZoom: 19,
             attribution: mapSourceAttribution
         }).addTo(map);
+        tripOverlay.addTo(map);
 
         // Add user's location
         new LocateControl({keepCurrentZoomLevel: true, showPopup: false, locateOptions: {watch: true}, onLocationError: function() {}}).addTo(map).start();
