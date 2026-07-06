@@ -99,7 +99,7 @@
 
             // If the vehicle doesn't have a marker yet, create one
             if (!Object.keys(vehicleMarkers).includes(vehicle.id)) {
-                const marker = L.marker([0, 0], {interactive: true}).addTo(map);
+                const marker = L.marker([0, 0], { interactive: true, zIndexOffset: 10 }).addTo(map);
                 marker.bindPopup('<div id="vehicle-popup" style="width: 300px;"></div>', {autoPan: false});
                 marker.addEventListener("popupopen", function() { onVehiclePopupClick(vehicle) });
                 marker.addEventListener("popupclose", function() { tripOverlay.clearLayers() });
