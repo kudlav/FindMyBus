@@ -127,12 +127,16 @@
                 // Adjust the background color brightness
                 genericColor = adjustHexColorBrightness(genericColor, $settingsStore.vehicleMarkerBackgroundBrightness);
 
-                marker.setIcon(L.divIcon({html: `
+                marker.setIcon(L.divIcon({
+                    html: `
                         <div class="vehicle-marker-container">
                             <div class="vehicle-marker-background vehicle-marker-arrow" id="${markerBackgroundElementId}" style="background-color: ${genericColor}"></div>
                             <span class="vehicle-marker-label" style="color: ${textColor};">${label}</span>
                         </div>
-                    `, className: ''}));
+                    `,
+                    className: '',
+                    iconAnchor: [15, 15]
+                }));
                 vehicleMarkers[vehicle.id] = marker;
             }
 
