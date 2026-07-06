@@ -61,7 +61,7 @@
 
                 const marker = L.marker([stop.location.latitude, stop.location.longitude], {icon: stopIcon});
                 marker.addTo(map);
-                marker.bindPopup(`<b>${stop.name}</b>`);
+                marker.bindPopup(`<b>${stop.name}</b>`, { closeButton: false });
                 stopMarkers[stop.id] = marker;
             }
         }
@@ -104,7 +104,7 @@
                 
                 const popupContainer = L.DomUtil.create('div');
                 popupContainer.style.width = '300px';
-                marker.bindPopup(popupContainer, { autoPan: false });
+                marker.bindPopup(popupContainer, { autoPan: false, closeButton: false });
                 marker.addEventListener("popupopen", function() {
                     onVehiclePopupClick(vehicle, popupContainer);
                 });

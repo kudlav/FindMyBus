@@ -7,7 +7,7 @@
     import { getStopTimesForTrip } from "$lib/gtfs/get";
     
     import type { Writable } from "svelte/store";
-    import type { Vehicle, Trip, Stop, StopTimes } from "$lib/gtfs/types";
+    import type { Vehicle, Stop, StopTimes } from "$lib/gtfs/types";
     
     import { Dialog, Table, TableHead, TableBody, TableRow, TableCell } from "konsta/svelte";
 
