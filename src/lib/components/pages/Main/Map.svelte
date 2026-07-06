@@ -22,7 +22,7 @@
     const stopMarkers: Record<string, L.Marker> = {};
     const vehicleMarkers: Record<string, L.Marker> = {};
 
-    let higlightMarker: L.CircleMarker | undefined;
+    let highlightMarker: L.CircleMarker | undefined;
     let tripOverlay = L.layerGroup([]);
 
     let selectedVehicle: Vehicle;
@@ -43,7 +43,7 @@
 
         if (zoomLevel >= 14) {
             for (const stop of Object.values($staticGtfsDataStore.stops)) {
-                // Is the station within bounds of the map? Avoid drawing it unenecessarily
+                // Is the station within bounds of the map? Avoid drawing it unnecessarily
                 // (this can actually help out a ton with performance)
                 if (!boundsWithPadding.contains([stop.location.latitude, stop.location.longitude])) {continue};
 
@@ -181,19 +181,19 @@
         // Remove any existing markers and all them back in
         // This is done after zooming, moving the map, and GTFS realtime
         // updates to update the map.
-        console.log(`Upadting vehicle map markers. Zoom level: ${map.getZoom()}`);
+        console.log(`Updating vehicle map markers. Zoom level: ${map.getZoom()}`);
         drawStops();
         drawVehicles();
     }
 
-    function higlightLocation(location: Location) {
-        // If the higlight marker doesn't exist yet, create it
-        if (!higlightMarker) {
-            higlightMarker = L.circleMarker([0, 0], {radius: 25, opacity: 0.75, color: 'lightgreen'}).addTo(map);
+    function highlightLocation(location: Location) {
+        // If the highlight marker doesn't exist yet, create it
+        if (!highlightMarker) {
+            highlightMarker = L.circleMarker([0, 0], {radius: 25, opacity: 0.75, color: 'lightgreen'}).addTo(map);
         }
 
         // Now move the marker (and the map) to the correct location
-        higlightMarker.setLatLng([location.latitude, location.longitude]);
+        highlightMarker.setLatLng([location.latitude, location.longitude]);
         map.setView([location.latitude, location.longitude]);
 
         // Zoom the user in at least a little bit if they aren't zoomed-in yet
@@ -319,7 +319,7 @@
 <div class="stop-times-dialog">
     {#if selectedVehicle}
         {#key selectedVehicle}
-            <StopTimesDialog vehicle={selectedVehicle} opened={stopTimesDialogOpen} onStopClick={function(stop) {higlightLocation(stop.location)}}/>
+            <StopTimesDialog vehicle={selectedVehicle} opened={stopTimesDialogOpen} onStopClick={function(stop) {highlightLocation(stop.location)}}/>
         {/key}
     {/if}
 </div>
