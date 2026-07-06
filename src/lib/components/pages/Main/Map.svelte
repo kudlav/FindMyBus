@@ -256,17 +256,12 @@
 
         map.setView(L.latLng($mapPositionStore.location), $mapPositionStore.zoomLevel);
 
-        let mapSourceAttribution: string;
+        let attribution: string | undefined;
         if ($settingsStore.mapSourceUrl.includes('tile.openstreetmap.org/')) {
-            mapSourceAttribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
-        } else {
-            mapSourceAttribution = '&copy; Custom map source';
+            attribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
         }
 
-        L.tileLayer($settingsStore.mapSourceUrl, {
-            maxZoom: 19,
-            attribution: mapSourceAttribution
-        }).addTo(map);
+        L.tileLayer($settingsStore.mapSourceUrl, { maxZoom: 19, attribution }).addTo(map);
         tripOverlay.addTo(map);
 
         // Add user's location
