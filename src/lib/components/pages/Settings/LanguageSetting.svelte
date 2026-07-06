@@ -5,7 +5,9 @@
 
     const languages = [
         { value: 'en', label: 'English' },
-        { value: 'cs', label: 'Čeština' }
+        { value: 'cs', label: 'Čeština' },
+        { value: 'es', label: 'Español' },
+        { value: 'gl', label: 'Galego' },
     ] as const;
 </script>
 

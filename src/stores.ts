@@ -27,7 +27,7 @@ type Settings = {
     staticGtfsUrl: string;
     realtimeGtfsUrl: string;
     realtimeGtfsUpdateInterval: number;
-    language: 'en' | 'cs';
+    language: 'en' | 'cs' | 'es' | 'gl';
     speedUnits: 'kilometersPerHour' | 'milesPerHour' | 'metersPerSecond' | 'knots' | 'feetPerDay';
     timeFormat: '12hour' | '24hour';
     darkMode: 'on' | 'off' | 'system';

@@ -5,6 +5,8 @@ import { get } from 'svelte/store';
 export async function initI18n() {
     register('en', () => import('./locales/en.json'));
     register('cs', () => import('./locales/cs.json'));
+    register('es', () => import('./locales/es.json'));
+    register('gl', () => import('./locales/gl.json'));
 
     await init({
         initialLocale: get(settingsStore).language,
