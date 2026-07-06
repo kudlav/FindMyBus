@@ -6,7 +6,7 @@
     import { getStopTimesForTrip } from "$lib/gtfs/get";
     import type { Vehicle, Stop, Trip, Route, StopTimes, Location } from "$lib/gtfs/types";
 
-    import { Button } from "konsta/svelte";
+    import { Button, Preloader } from "konsta/svelte";
     import Icon from "svelte-awesome";
     import type { IconData } from "svelte-awesome/components/Icon.svelte";
     import mapPin from 'svelte-awesome/icons/mapPin';
@@ -21,6 +21,7 @@
 
     export let vehicle: Vehicle;
     export let drawTrip: (trip: { locations: Location[], color: string }) => void;
+    export let onOpenStopTimes: () => void;
 
     let trip: Trip;
     let route: Route;
@@ -37,7 +38,7 @@
     let routeType: {icon: Record<string, IconData>, label: string} | null = null;
 
     let finishedLoading = false;
-    let errorMessage: string | undefined = $_('map.vehiclePopup.errors.timeout');
+    let errorMessage: string | undefined;
 
     async function load() {
         // We assume we have the vehicle's position information,
@@ -109,6 +110,9 @@
 
     onMount(async function() {
         errorMessage = await load();
+        if (!errorMessage) {
+            finishedLoading = true;
+        }
     });
 </script>
 
@@ -142,7 +146,15 @@
     }
 </style>
 
-{#if !errorMessage}
+{#if !finishedLoading && !errorMessage}
+    <div class="flex justify-center p-4">
+        <Preloader />
+    </div>
+{:else if errorMessage}
+    <div class="p-2 text-center text-red-500">
+        {errorMessage}
+    </div>
+{:else}
     <div class="popup-container">
         <div class="header">
             <span class="tag" style:color={textColor} style:background-color={genericColor}>{route.name.short}</span>
@@ -183,10 +195,8 @@
 
         {#if stopTimes && stopTimes.length > 0}
             <div class="stop-times-button-container">
-                <Button small id="open-stop-times-dialog-button">{$_('map.stopTimesDialog.title')}</Button>
+                <Button small onClick={onOpenStopTimes}>{$_('map.stopTimesDialog.title')}</Button>
             </div>
         {/if}
     </div>
-{:else}
-    {errorMessage}
 {/if}

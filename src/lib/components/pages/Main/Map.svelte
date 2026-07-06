@@ -6,7 +6,7 @@
     import { _ } from 'svelte-i18n';
     import L from "leaflet";
     import { LocateControl } from "leaflet.locatecontrol";
-    import { onMount } from "svelte";
+    import { onMount, mount, unmount } from "svelte";
     import { writable } from 'svelte/store';
 
     import { staticGtfsDataStore, realtimeGtfsDataStore, mapPositionStore, settingsStore } from '../../../../stores';
@@ -21,10 +21,11 @@
     let stopsLastDrawn: Stop[] = [];
     const stopMarkers: Record<string, L.Marker> = {};
     const vehicleMarkers: Record<string, L.Marker> = {};
-
+    
     let highlightMarker: L.CircleMarker | undefined;
     let tripOverlay = L.layerGroup([]);
-
+    
+    let activePopup: any;
     let selectedVehicle: Vehicle;
     const stopTimesDialogOpen = writable<boolean>(false);
 
@@ -100,9 +101,17 @@
             // If the vehicle doesn't have a marker yet, create one
             if (!Object.keys(vehicleMarkers).includes(vehicle.id)) {
                 const marker = L.marker([0, 0], { interactive: true, zIndexOffset: 10 }).addTo(map);
-                marker.bindPopup('<div id="vehicle-popup" style="width: 300px;"></div>', {autoPan: false});
-                marker.addEventListener("popupopen", function() { onVehiclePopupClick(vehicle) });
-                marker.addEventListener("popupclose", function() { tripOverlay.clearLayers() });
+                
+                const popupContainer = L.DomUtil.create('div');
+                popupContainer.style.width = '300px';
+                marker.bindPopup(popupContainer, { autoPan: false });
+                marker.addEventListener("popupopen", function() {
+                    onVehiclePopupClick(vehicle, popupContainer);
+                });
+                marker.addEventListener("popupclose", function() {
+                    tripOverlay.clearLayers();
+                    closeVehiclePopup();
+                });
 
                 // Try to use the vehicle's route short name as a label, otherwise
                 // leave it empty
@@ -174,6 +183,9 @@
         for (const vehicleId of vehicleIdsToRemove) {
             map.removeLayer(vehicleMarkers[vehicleId]);
             delete vehicleMarkers[vehicleId];
+            if (selectedVehicle.id === vehicleId) {
+                closeVehiclePopup()
+            }
         }
     }
 
@@ -218,24 +230,24 @@
         $mapPositionStore.zoomLevel = map.getZoom();
     }
 
-    function onVehiclePopupClick(vehicle: Vehicle) {
+    function onVehiclePopupClick(vehicle: Vehicle, popupContainer: HTMLDivElement) {
         selectedVehicle = vehicle;
-        setTimeout(function() {replaceVehiclePopup()}, 200);
+        closeVehiclePopup();
+        activePopup = mount(VehiclePopup, {
+            target: popupContainer,
+            props: {
+                vehicle,
+                drawTrip: function(trip) { drawTripPolyline(trip); },
+                onOpenStopTimes: function() { $stopTimesDialogOpen = true; }
+            }
+        });
     }
 
-    function replaceVehiclePopup() {
-        const popupElement = document.getElementById('vehicle-popup') as HTMLDivElement;
-        const templateElement = document.getElementById('vehicle-popup-template') as HTMLElement;
-        if (!popupElement || !templateElement) {console.warn("Failed to find vehicle popup"); return};
-
-        // Replace the HTML
-        popupElement.outerHTML = templateElement.outerHTML;
-
-        // Add an event listener to the button for opening stop times dialog
-        const buttonElement = document.getElementById('open-stop-times-dialog-button') as HTMLButtonElement;
-        if (!buttonElement) {console.warn("Failed to find vehicle popup button"); return};
-        buttonElement.onclick = function() {$stopTimesDialogOpen = true};
-
+    function closeVehiclePopup() {
+        if (activePopup) {
+            unmount(activePopup);
+            activePopup = undefined;
+        }
     }
 
     onMount(function() {
@@ -322,17 +334,4 @@
             <StopTimesDialog vehicle={selectedVehicle} opened={stopTimesDialogOpen} onStopClick={function(stop) {highlightLocation(stop.location)}}/>
         {/key}
     {/if}
-</div>
-
-<!-- This is where the popup content gets pulled from when clicking on a vehicle -->
-<div style="display: none;">
-    <div id="vehicle-popup-template">
-        {#if selectedVehicle}
-            {#key selectedVehicle}
-                <VehiclePopup vehicle={selectedVehicle} drawTrip={function(trip) {drawTripPolyline(trip)}}/>
-            {/key}
-        {:else}
-            {$_("map.errors.failedToGeneratePopupContent")}
-        {/if}
-    </div>
 </div>
