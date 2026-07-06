@@ -49,7 +49,7 @@
     },
     "onboarding": {
         "title": "Vítejte! 👋",
-        "text": "<b>Vítejte k FindMyBus!</b><br><br>Tato aplikace vám umožňuje sledovat pozici vozidel veřejné dopravy na mapě v reálném čase. Toto je umožněno dynamickými GTFS daty, které jsou celosvětově poskytovány mnohými dopravními společnostmi. Pokud vaše místní dopravní společnost nabízí tyto dynamické GTFS data, můžete nastavit patřičné URL adresy níže. Pokud vaše dopravní společnost nabízí několik různých souborů dynamických GTFS dat, vyberte ten, který obsahuje pozici voizdel.<br><br>Vemte prosím na vědomí, že aplikace FindMyBus podporuje pouze verzi 2.0 protokolu GTFS a také se navíc drží nějakých dodatečných předpokladů ohledně obsahu dat. Při testování s různými dopravními společnostmi však nebyly nalezeny žádné problémy.<br><br>FindMyBus je open source a stvořen s ❤️.",
+        "text": "<b>Vítejte k FindMyBus!</b><br><br>Tato aplikace vám umožňuje sledovat pozici vozidel veřejné dopravy na mapě v reálném čase. Toto je umožněno dynamickými GTFS daty, které jsou celosvětově poskytovány mnohými dopravními společnostmi. Pokud vaše místní dopravní společnost nabízí tyto dynamické GTFS data, můžete nastavit patřičné URL adresy níže. Pokud vaše dopravní společnost nabízí několik různých souborů dynamických GTFS dat, vyberte ten, který obsahuje pozici vozidel.<br><br>Vezměte prosím na vědomí, že aplikace FindMyBus podporuje pouze verzi 2.0 protokolu GTFS a také se navíc drží nějakých dodatečných předpokladů ohledně obsahu dat. Při testování s různými dopravními společnostmi však nebyly nalezeny žádné problémy.<br><br>FindMyBus je open source a stvořen s ❤️.",
         "settings": "Počáteční nastavení",
         "finishButton": "Pojďme na to!"
     },
@@ -80,7 +80,7 @@
         "realtimeGtfsUpdateIntervalSetting": {
             "label": "Aktualizovat dynamická GTFS data každých {value} sekund."
         },
-        "visual": "Vzhledové",
+        "visual": "Vzhled",
         "languageSettingSetting": {
             "label": "Jazyk"
         },
@@ -109,10 +109,10 @@
             "material": "Android"
         },
         "showVehicleMarkerLabelsSetting": {
-            "label": "Zobrazovat text na mapových ukazovatelech voizdel"
+            "label": "Zobrazovat text na symbolech vozidel"
         },
         "vehicleMarkerBackgroundBrightnessSetting": {
-            "label": "Jas pozadí mapových ukazovatelech vozidel ({value}%)"
+            "label": "Jas barvy symbolů vozidel ({value}%)"
         },
         "mapSourceUrl": {
             "label": "URL zdroje map (pouze pro pokročilé uživatele)",
