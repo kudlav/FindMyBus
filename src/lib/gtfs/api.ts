@@ -71,7 +71,8 @@ type StopTimesFile = {
     stop_sequence: string;
 }[];
 
-export async function fetchStaticGtfs(url: string) {
+export async function fetchStaticGtfs(url: string, onProgress: (progress: number, phase: string) => void) {
+    onProgress(0.1, 'downloading');
     // fetch the GTFS static file, which is a zip file
     const options: HttpOptions = {
         url: url,
@@ -90,6 +91,7 @@ export async function fetchStaticGtfs(url: string) {
     console.log(`GTFS static data received. Size: ${response.data.length / (1024 * 1024)} MB`);
 
     // unzip it
+    onProgress(0.2, 'unzip');
     const files = unzipSync(base64ToUint8Array(response.data));
     console.log(`Unzipped, found ${Object.keys(files).length} files.`);
 
@@ -103,11 +105,13 @@ export async function fetchStaticGtfs(url: string) {
     }
 
     // get agency name
+    onProgress(0.3, 'agencyName');
     const agencyName = (parseUnzipedCsvFile(files['agency.txt']) as AgencyFile)[0].agency_name;
     if (!agencyName) {throw new Error('Failed to find agency name')};
     console.log(`Agency: ${agencyName}`);
 
     // parse stops
+    onProgress(0.4, 'stops');
     const stopsFile = parseUnzipedCsvFile(files['stops.txt']) as StopsFile;
     console.log(`Stops: ${stopsFile.length}`);
 
@@ -146,6 +150,7 @@ export async function fetchStaticGtfs(url: string) {
     }
 
     // parse routes
+    onProgress(0.5, 'routes');
     const routesFile = parseUnzipedCsvFile(files['routes.txt']) as RoutesFile;
     console.log(`Routes: ${routesFile.length}`);
 
@@ -180,6 +185,7 @@ export async function fetchStaticGtfs(url: string) {
     }
 
     // parse trips
+    onProgress(0.6, 'trips');
     const tripsFile = parseUnzipedCsvFile(files['trips.txt']) as TripsFile;
     console.log(`Trips: ${tripsFile.length}`);
 
@@ -194,6 +200,7 @@ export async function fetchStaticGtfs(url: string) {
     }
 
     // parse stop times (and save them per trip id)
+    onProgress(0.8, 'stopTimes');
     const stopTimesFile = parseUnzipedCsvFile(files['stop_times.txt']) as StopTimesFile;
     console.log(`Individual stop time records: ${stopTimesFile.length}`);
 
@@ -254,6 +261,7 @@ export async function fetchStaticGtfs(url: string) {
 
     console.log("Saved stop times to data storage.");
     console.log("Parsing and saving static GTFS done.");
+    onProgress(1.0, 'stopTimes');
 }
 
 export async function fetchRealtimeGtfs(url: string) {

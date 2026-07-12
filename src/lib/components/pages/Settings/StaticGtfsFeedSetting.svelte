@@ -3,20 +3,25 @@
     import { settingsStore } from "../../../../stores";
     import { fetchStaticGtfs } from "$lib/gtfs/api";
 
-    import { Block, Button, Dialog, DialogButton, ListInput, Preloader } from "konsta/svelte";
+    import { Block, Button, Dialog, DialogButton, ListInput, Progressbar } from "konsta/svelte";
 
     let url = $settingsStore.staticGtfsUrl;
     let working = false;
     let error = '';
+    let progress = 0;
+    let phase = '';
 
     async function onClick() {
         if (working) {return}; // make sure we're not doing this twice at the same time
-        
+
         working = true;
         error = '';
 
         try {
-            await fetchStaticGtfs(url); // attempt to fetch the feed with the provided URL
+            await fetchStaticGtfs(url, (newProgress, newPhase) => {
+                progress = newProgress;
+                phase = newPhase;
+            }); // attempt to fetch the feed with the provided URL
 
             // That was simple - everything seems to have gone fine!
             $settingsStore.staticGtfsUrl = url;
@@ -60,10 +65,11 @@
 
 <Dialog opened={working && !error}>
     <svelte:fragment slot="title">{$_('settings.staticGtfsFeedSetting.dialog.title')}</svelte:fragment>
-    {$_('generic.pleaseWait')} <br><br>
-    
-    <div class="text-center">
-        <Preloader/>
+    <div class="mb-4">
+        {$_(`settings.staticGtfsFeedSetting.dialog.${phase}`)}
+    </div>
+    <div class="mb-4">
+        <Progressbar progress={progress} />
     </div>
 </Dialog>
 

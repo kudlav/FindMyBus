@@ -66,6 +66,13 @@
             "refresh": "Refresh static GTFS data",
             "dialog": {
                 "title": "Fetching and parsing data",
+                "downloading": "Downloading data",
+                "unzip": "Unzipping data",
+                "agencyName": "Processing agency info",
+                "stops": "Processing stops",
+                "routes": "Processing routes",
+                "trips": "Processing trips",
+                "stopTimes": "Processing stop times",
                 "errors": {
                     "failed": "Fetching GTFS static data failed. Please make sure you have provided a valid GTFS feed URL and are connected to the internet."
                 }
