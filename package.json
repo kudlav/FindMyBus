@@ -1,7 +1,6 @@
 {
   "name": "findmybus",
   "private": true,
-  "version": "0.0.1",
   "type": "module",
   "scripts": {
     "dev": "vite dev",
@@ -34,6 +33,7 @@
     "@capacitor/android": "^8.0.0",
     "@capacitor/app": "^8.0.0",
     "@capacitor/core": "^8.0.0",
+    "@capacitor/file-transfer": "^2.0.4",
     "@capacitor/filesystem": "^8.0.0",
     "@capacitor/preferences": "^8.0.0",
     "@fontsource/roboto": "^5.2.6",

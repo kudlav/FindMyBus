@@ -30,6 +30,11 @@
     "license": "MIT"
   },
   {
+    "name": "@capacitor/file-transfer",
+    "version": "2.0.4",
+    "license": "MIT"
+  },
+  {
     "name": "@capacitor/filesystem",
     "version": "8.1.2",
     "license": "MIT"
@@ -51,7 +56,7 @@
   },
   {
     "name": "@sveltejs/kit",
-    "version": "2.53.0",
+    "version": "2.61.1",
     "license": "MIT"
   },
   {
@@ -115,12 +120,12 @@
   },
   {
     "name": "postcss",
-    "version": "8.5.6",
+    "version": "8.5.15",
     "license": "MIT"
   },
   {
     "name": "svelte",
-    "version": "5.53.2",
+    "version": "5.55.10",
     "license": "MIT"
   },
   {
@@ -155,7 +160,7 @@
   },
   {
     "name": "vite",
-    "version": "6.4.1",
+    "version": "6.4.2",
     "license": "MIT"
   }
 ]

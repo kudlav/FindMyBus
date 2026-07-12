@@ -1,6 +1,10 @@
-import { CapacitorHttp } from '@capacitor/core';
+import { CapacitorHttp, Capacitor } from '@capacitor/core';
+import { Filesystem, Directory, type GetUriOptions } from '@capacitor/filesystem';
+import { FileTransfer } from '@capacitor/file-transfer';
 import type { HttpOptions, HttpResponse } from '@capacitor/core';
-import { unzipSync, strFromU8 } from 'fflate';
+import { unzip, strFromU8 } from 'fflate';
+
+const yieldToMain = () => new Promise<void>(resolve => setTimeout(resolve, 0));
 import Papa from 'papaparse';
 import GtfsRealtimeBindings from "gtfs-realtime-bindings";
 
@@ -20,6 +24,15 @@ function base64ToUint8Array(base64: string): Uint8Array {
         bytes[i] = binaryString.charCodeAt(i);
     }
     return bytes;
+}
+
+async function unzipAsync(data: Uint8Array, files: string[]): Promise<Record<string, Uint8Array>> {
+    return new Promise((resolve, reject) => {
+        unzip(data, { filter: (f) => files.includes(f.name) }, (err, unzipped) => {
+            if (err) reject(err);
+            else resolve(unzipped);
+        });
+    });
 }
 
 function parseUnzipedCsvFile(fileData: Uint8Array): Array<Record<string, string | number>> {
@@ -73,10 +86,10 @@ type StopTimesFile = {
 
 export async function fetchStaticGtfs(url: string, onProgress: (progress: number, phase: string) => void) {
     onProgress(0.1, 'downloading');
-    // fetch the GTFS static file, which is a zip file
-    const options: HttpOptions = {
+    let zipData: Uint8Array;
+
+    const baseHttpOptions = {
         url: url,
-        responseType: 'blob',
         headers: {
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache',
@@ -85,19 +98,39 @@ export async function fetchStaticGtfs(url: string, onProgress: (progress: number
         },
         connectTimeout: 4000,
         readTimeout: 4000
-    }
+    };
 
-    const response: HttpResponse = await CapacitorHttp.get(options);
-    console.log(`GTFS static data received. Size: ${response.data.length / (1024 * 1024)} MB`);
+    if (Capacitor.getPlatform() === 'web') {
+        const response: HttpResponse = await CapacitorHttp.get({
+            ...baseHttpOptions,
+            responseType: 'blob'
+        });
+        zipData = base64ToUint8Array(response.data);
+    } else {
+        const tmpFile: GetUriOptions = {
+            directory: Directory.Cache,
+            path: 'gtfs_temp.zip'
+        };
+        const fileUriInfo = await Filesystem.getUri(tmpFile);
+        const downloadResult = await FileTransfer.downloadFile({
+            ...baseHttpOptions,
+            path: fileUriInfo.uri
+        });
+        const fileUrl = Capacitor.convertFileSrc(downloadResult.path || fileUriInfo.uri);
+        const localResponse = await fetch(fileUrl);
+        zipData = new Uint8Array(await localResponse.arrayBuffer());
+        await Filesystem.deleteFile(tmpFile);
+    }
+    console.log(`GTFS static data loaded. Size: ${zipData.byteLength / (1024 * 1024)} MB`);
 
     // unzip it
     onProgress(0.2, 'unzip');
-    const files = unzipSync(base64ToUint8Array(response.data));
+    await yieldToMain();
+    const expectedFiles = ['agency.txt', 'stops.txt', 'routes.txt', 'trips.txt', 'stop_times.txt'];
+    const files = await unzipAsync(zipData, expectedFiles);
     console.log(`Unzipped, found ${Object.keys(files).length} files.`);
 
     // assert we've got the necessary files
-    const expectedFiles = ['agency.txt', 'stops.txt', 'routes.txt', 'trips.txt', 'stop_times.txt'];
-
     for (const file of expectedFiles) {
         if (!files[file]) {
             throw new Error(`Expected file ${file} not found in GTFS static data.`);
@@ -106,13 +139,17 @@ export async function fetchStaticGtfs(url: string, onProgress: (progress: number
 
     // get agency name
     onProgress(0.3, 'agencyName');
+    await yieldToMain();
     const agencyName = (parseUnzipedCsvFile(files['agency.txt']) as AgencyFile)[0].agency_name;
+    delete files['agency.txt'];
     if (!agencyName) {throw new Error('Failed to find agency name')};
     console.log(`Agency: ${agencyName}`);
 
     // parse stops
     onProgress(0.4, 'stops');
+    await yieldToMain();
     const stopsFile = parseUnzipedCsvFile(files['stops.txt']) as StopsFile;
+    delete files['stops.txt']
     console.log(`Stops: ${stopsFile.length}`);
 
     const stops: Record<string, Stop> = {};
@@ -151,7 +188,9 @@ export async function fetchStaticGtfs(url: string, onProgress: (progress: number
 
     // parse routes
     onProgress(0.5, 'routes');
+    await yieldToMain();
     const routesFile = parseUnzipedCsvFile(files['routes.txt']) as RoutesFile;
+    delete files['routes.txt'];
     console.log(`Routes: ${routesFile.length}`);
 
     const routes: Record<string, Route> = {};
@@ -186,7 +225,9 @@ export async function fetchStaticGtfs(url: string, onProgress: (progress: number
 
     // parse trips
     onProgress(0.6, 'trips');
+    await yieldToMain();
     const tripsFile = parseUnzipedCsvFile(files['trips.txt']) as TripsFile;
+    delete files['trips.txt'];
     console.log(`Trips: ${tripsFile.length}`);
 
     const trips: Record<string, Trip> = {};
@@ -200,9 +241,14 @@ export async function fetchStaticGtfs(url: string, onProgress: (progress: number
     }
 
     // parse stop times (and save them per trip id)
-    onProgress(0.8, 'stopTimes');
+    onProgress(0.7, 'stopTimes');
+    await yieldToMain();
     const stopTimesFile = parseUnzipedCsvFile(files['stop_times.txt']) as StopTimesFile;
+    delete files['stop_times.txt'];
     console.log(`Individual stop time records: ${stopTimesFile.length}`);
+
+    onProgress(0.75, 'stopTimes');
+    await yieldToMain();
 
     // sort the individual stops by their sequence
     stopTimesFile.sort((a, b) => Number(a.stop_sequence) - Number(b.stop_sequence));
@@ -223,6 +269,8 @@ export async function fetchStaticGtfs(url: string, onProgress: (progress: number
         });
     }
 
+    onProgress(0.8, 'stopTimes');
+    await yieldToMain();
     console.log(`Saved stop times for ${Object.keys(stopTimesPerTrip).length} trips.`);
 
     // as the stop time records are by far the largest in size, and also not needed until a specific vehicle is clicked on,
@@ -240,6 +288,8 @@ export async function fetchStaticGtfs(url: string, onProgress: (progress: number
         tripStopTimesPerKey[key][tripId] = stopTimes;
     }
 
+    onProgress(0.9, 'stopTimes');
+    await yieldToMain();
     console.log(`Split stop times under ${Object.keys(tripStopTimesPerKey).length} keys.`);
 
     // save the parsed info
