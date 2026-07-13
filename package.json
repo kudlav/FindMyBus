@@ -9,7 +9,8 @@
     "prepare": "svelte-kit sync || echo ''",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-    "postinstall": "node scripts/generate-dependency-acknowledgments.js"
+    "postinstall": "node scripts/generate-dependency-acknowledgments.js",
+    "android": "npm run build && npx cap sync && npx cap open android"
   },
   "devDependencies": {
     "@capacitor/assets": "^3.0.5",
