@@ -62,13 +62,13 @@
             "refresh": "Obnovit statická GTFS data",
             "dialog": {
                 "title": "Stahuji a zpracovávám data",
-                "downloading": "Stahování dat",
+                "download": "Stahování dat",
                 "unzip": "Rozbalování dat",
-                "agencyName": "Zpracování informací o dopravci",
                 "stops": "Zpracování zastávek",
                 "routes": "Zpracování linek",
                 "trips": "Zpracování spojů",
                 "stopTimes": "Zpracování jízdních řádů",
+                "save": "Ukládání dat",
                 "errors": {
                     "failed": "Načítání statických GTFS dat selhalo. Prosím ujistěte se, že jste zadali správnou URL adresu GTFS dat a že jste připojeni k internetu."
                 }

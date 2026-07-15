@@ -45,12 +45,6 @@ function parseUnzipedCsvFile(fileData: Uint8Array): Array<Record<string, string 
 // However, these are the fields this app expects, and there should be better error-handling
 // in the future.
 
-type AgencyFile = {
-    agency_name: string;
-    agency_url: string;
-    agency_timezone: string;
-}[];
-
 type StopsFile = {
     stop_id: string;
     stop_name: string;
@@ -85,7 +79,7 @@ type StopTimesFile = {
 }[];
 
 export async function fetchStaticGtfs(url: string, onProgress: (progress: number, phase: string) => void) {
-    onProgress(0.1, 'downloading');
+    onProgress(0.1, 'download');
     let zipData: Uint8Array;
 
     const baseHttpOptions = {
@@ -126,7 +120,7 @@ export async function fetchStaticGtfs(url: string, onProgress: (progress: number
     // unzip it
     onProgress(0.2, 'unzip');
     await yieldToMain();
-    const expectedFiles = ['agency.txt', 'stops.txt', 'routes.txt', 'trips.txt', 'stop_times.txt'];
+    const expectedFiles = ['stops.txt', 'routes.txt', 'trips.txt', 'stop_times.txt'];
     const files = await unzipAsync(zipData, expectedFiles);
     console.log(`Unzipped, found ${Object.keys(files).length} files.`);
 
@@ -137,16 +131,8 @@ export async function fetchStaticGtfs(url: string, onProgress: (progress: number
         }
     }
 
-    // get agency name
-    onProgress(0.3, 'agencyName');
-    await yieldToMain();
-    const agencyName = (parseUnzipedCsvFile(files['agency.txt']) as AgencyFile)[0].agency_name;
-    delete files['agency.txt'];
-    if (!agencyName) {throw new Error('Failed to find agency name')};
-    console.log(`Agency: ${agencyName}`);
-
     // parse stops
-    onProgress(0.4, 'stops');
+    onProgress(0.3, 'stops');
     await yieldToMain();
     const stopsFile = parseUnzipedCsvFile(files['stops.txt']) as StopsFile;
     delete files['stops.txt']
@@ -187,7 +173,7 @@ export async function fetchStaticGtfs(url: string, onProgress: (progress: number
     }
 
     // parse routes
-    onProgress(0.5, 'routes');
+    onProgress(0.4, 'routes');
     await yieldToMain();
     const routesFile = parseUnzipedCsvFile(files['routes.txt']) as RoutesFile;
     delete files['routes.txt'];
@@ -224,7 +210,7 @@ export async function fetchStaticGtfs(url: string, onProgress: (progress: number
     }
 
     // parse trips
-    onProgress(0.6, 'trips');
+    onProgress(0.5, 'trips');
     await yieldToMain();
     const tripsFile = parseUnzipedCsvFile(files['trips.txt']) as TripsFile;
     delete files['trips.txt'];
@@ -241,13 +227,13 @@ export async function fetchStaticGtfs(url: string, onProgress: (progress: number
     }
 
     // parse stop times (and save them per trip id)
-    onProgress(0.7, 'stopTimes');
+    onProgress(0.6, 'stopTimes');
     await yieldToMain();
     const stopTimesFile = parseUnzipedCsvFile(files['stop_times.txt']) as StopTimesFile;
     delete files['stop_times.txt'];
     console.log(`Individual stop time records: ${stopTimesFile.length}`);
 
-    onProgress(0.75, 'stopTimes');
+    onProgress(0.7, 'stopTimes');
     await yieldToMain();
 
     // sort the individual stops by their sequence
@@ -288,7 +274,7 @@ export async function fetchStaticGtfs(url: string, onProgress: (progress: number
         tripStopTimesPerKey[key][tripId] = stopTimes;
     }
 
-    onProgress(0.9, 'stopTimes');
+    onProgress(0.9, 'save');
     await yieldToMain();
     console.log(`Split stop times under ${Object.keys(tripStopTimesPerKey).length} keys.`);
 
@@ -296,7 +282,6 @@ export async function fetchStaticGtfs(url: string, onProgress: (progress: number
     staticGtfsDataStore.set({
         dataTypeVersion: 0,
         timestamp: new Date().toString(),
-        agencyName: agencyName,
         stops: stops,
         routes: routes,
         trips: trips

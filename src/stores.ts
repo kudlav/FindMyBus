@@ -10,7 +10,6 @@ import type { Stop, Route, Trip, Vehicle } from "$lib/gtfs/types";
 type StaticGtfsData = {
     dataTypeVersion: 0;
     timestamp: string;
-    agencyName: string;
     stops: Record<string, Stop>;
     routes: Record<string, Route>;
     trips: Record<string, Trip>;
@@ -50,7 +49,6 @@ let staticGtfsDataStoreLoaded = false;
 export const staticGtfsDataStore = writable<StaticGtfsData>({
     dataTypeVersion: 0,
     timestamp: new Date().toString(),
-    agencyName: "None",
     stops: {},
     routes: {},
     trips: {}

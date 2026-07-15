@@ -66,13 +66,13 @@
             "refresh": "Actualizar datos GTFS estáticos",
             "dialog": {
                 "title": "Obtendo e procesando os datos",
-                "downloading": "Descargando datos",
+                "download": "Descargando datos",
                 "unzip": "Descomprimindo datos",
-                "agencyName": "Procesando información de axencia",
                 "stops": "Procesando paradas",
                 "routes": "Procesando rutas",
                 "trips": "Procesando viaxes",
                 "stopTimes": "Procesando horarios de paradas",
+                "save": "Gardando datos",
                 "errors": {
                     "failed": "Fallou a obtención dos datos GTFS estáticos. Comproba que o URL da canle GTFS é válido e tes conexión activa a internet."
                 }
