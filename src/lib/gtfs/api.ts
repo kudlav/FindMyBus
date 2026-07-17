@@ -112,7 +112,7 @@ export async function fetchStaticGtfs(url: string, onProgress: (progress: number
         });
         const fileUrl = Capacitor.convertFileSrc(downloadResult.path || fileUriInfo.uri);
         const localResponse = await fetch(fileUrl);
-        zipData = new Uint8Array(await localResponse.arrayBuffer());
+        zipData = await localResponse.bytes();
         await Filesystem.deleteFile(tmpFile);
     }
     console.log(`GTFS static data loaded. Size: ${zipData.byteLength / (1024 * 1024)} MB`);
