@@ -67,7 +67,6 @@
             "dialog": {
                 "title": "Fetching and parsing data",
                 "download": "Downloading data",
-                "unzip": "Unzipping data",
                 "stops": "Processing stops",
                 "routes": "Processing routes",
                 "trips": "Processing trips",

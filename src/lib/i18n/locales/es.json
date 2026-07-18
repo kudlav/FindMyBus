@@ -67,7 +67,6 @@
             "dialog": {
                 "title": "Obteniendo y procesando los datos",
                 "download": "Descargando datos",
-                "unzip": "Descomprimiendo datos",
                 "stops": "Procesando paradas",
                 "routes": "Procesando rutas",
                 "trips": "Procesando viajes",

@@ -37,6 +37,7 @@
     "@capacitor/file-transfer": "^2.0.4",
     "@capacitor/filesystem": "^8.0.0",
     "@capacitor/preferences": "^8.0.0",
+    "@capgo/capacitor-zip": "^8.1.16",
     "@fontsource/roboto": "^5.2.6",
     "canvas-confetti": "^1.9.3",
     "fflate": "^0.8.2",

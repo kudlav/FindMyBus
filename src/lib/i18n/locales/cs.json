@@ -63,7 +63,6 @@
             "dialog": {
                 "title": "Stahuji a zpracovávám data",
                 "download": "Stahování dat",
-                "unzip": "Rozbalování dat",
                 "stops": "Zpracování zastávek",
                 "routes": "Zpracování linek",
                 "trips": "Zpracování spojů",
