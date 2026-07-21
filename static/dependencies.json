@@ -45,6 +45,11 @@
     "license": "MIT"
   },
   {
+    "name": "@capgo/capacitor-zip",
+    "version": "8.1.16",
+    "license": "MPL-2.0"
+  },
+  {
     "name": "@fontsource/roboto",
     "version": "5.2.10",
     "license": "OFL-1.1"

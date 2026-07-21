@@ -63,15 +63,13 @@
     <link rel="icon" href={iconUrl} />
 </svelte:head>
 
-{#if $currentPageStore === 'loading'}
-    <Loading/>
-{/if}
-
 {#key [useDarkMode, theme]}
     <div class:dark={useDarkMode} class:ios-lightmode={!useDarkMode && theme === 'ios'} class:safe-areas={!ignoreSafeAreaPages.includes($currentPageStore)} style:background-color={safeAreaPaddingColor}>
         <App {theme} safeAreas={false} dark={useDarkMode}>
             <Page>
-                {#if $currentPageStore === 'main'}
+                {#if $currentPageStore === 'loading'}
+                    <Loading/>
+                {:else if $currentPageStore === 'main'}
                     <Main/>
                 {:else if $currentPageStore === 'onboarding'}
                     <Onboarding/>
