@@ -2,6 +2,7 @@
     import { _ } from "svelte-i18n";
     import { settingsStore } from "../../../../stores";
     import { fetchRealtimeGtfs } from "$lib/gtfs/api";
+    import { portal } from "$lib/actions/portal";
 
     import { Block, Button, Dialog, ListInput, Preloader, DialogButton } from "konsta/svelte";
 
@@ -52,24 +53,26 @@
     </div>
 </div>
 
-<Dialog opened={working && !error}>
-    <svelte:fragment slot="title">{$_('settings.realtimeGtfsFeedSetting.dialog.title')}</svelte:fragment>
-    {$_('generic.pleaseWait')} <br><br>
-    
-    <div class="text-center">
-        <Preloader/>
-    </div>
-</Dialog>
+<div use:portal>
+    <Dialog opened={working && !error}>
+        <svelte:fragment slot="title">{$_('settings.realtimeGtfsFeedSetting.dialog.title')}</svelte:fragment>
+        {$_('generic.pleaseWait')} <br><br>
+        
+        <div class="text-center">
+            <Preloader/>
+        </div>
+    </Dialog>
 
-<Dialog opened={working && error.length > 0} onBackdropClick={function() {working = false}}>
-    <svelte:fragment slot="title">{$_('generic.error')}</svelte:fragment>
-    {$_('settings.realtimeGtfsFeedSetting.dialog.errors.failed')}
+    <Dialog opened={working && error.length > 0} onBackdropClick={function() {working = false}}>
+        <svelte:fragment slot="title">{$_('generic.error')}</svelte:fragment>
+        {$_('settings.realtimeGtfsFeedSetting.dialog.errors.failed')}
 
-    <Block strong>
-        {error}
-    </Block>
+        <Block strong>
+            {error}
+        </Block>
 
-    <svelte:fragment slot="buttons">
-        <DialogButton onClick={function() {working = false}} strong>{$_('generic.confirm')}</DialogButton>
-    </svelte:fragment>
-</Dialog>
+        <svelte:fragment slot="buttons">
+            <DialogButton onClick={function() {working = false}} strong>{$_('generic.confirm')}</DialogButton>
+        </svelte:fragment>
+    </Dialog>
+</div>

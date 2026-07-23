@@ -10,6 +10,7 @@
     import type { Vehicle, Stop, StopTimes } from "$lib/gtfs/types";
     
     import { Dialog, Table, TableHead, TableBody, TableRow, TableCell } from "konsta/svelte";
+    import { portal } from "$lib/actions/portal";
 
     export let opened: Writable<boolean>;
     export let vehicle: Vehicle;
@@ -48,8 +49,8 @@
     }
 </style>
 
-<div class="dialog-container">
-    <Dialog opened={$opened} onBackdropClick={function() {$opened = false}} style="width: 350px">
+<div class="dialog-container" use:portal>
+    <Dialog opened={$opened} onBackdropClick={function() {$opened = false}} sizeIos="w-[350px]" sizeMaterial="w-[350px]">
         {#if vehicle && stopTimes}
             <div class="table-container">
                 <Table>

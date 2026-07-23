@@ -2,6 +2,7 @@
     import { _ } from "svelte-i18n";
     import { settingsStore } from "../../../../stores";
     import { fetchStaticGtfs } from "$lib/gtfs/api";
+    import { portal } from "$lib/actions/portal";
 
     import { Block, Button, Dialog, DialogButton, ListInput, Progressbar } from "konsta/svelte";
 
@@ -63,25 +64,27 @@
     </div>
 </div>
 
-<Dialog opened={working && !error}>
-    <svelte:fragment slot="title">{$_('settings.staticGtfsFeedSetting.dialog.title')}</svelte:fragment>
-    <div class="mb-4">
-        {$_(`settings.staticGtfsFeedSetting.dialog.${phase}`)}
-    </div>
-    <div class="mb-4">
-        <Progressbar progress={progress} />
-    </div>
-</Dialog>
+<div use:portal>
+    <Dialog opened={working && !error}>
+        <svelte:fragment slot="title">{$_('settings.staticGtfsFeedSetting.dialog.title')}</svelte:fragment>
+        <div class="mb-4">
+            {$_(`settings.staticGtfsFeedSetting.dialog.${phase}`)}
+        </div>
+        <div class="mb-4">
+            <Progressbar progress={progress} />
+        </div>
+    </Dialog>
 
-<Dialog opened={working && error.length > 0} onBackdropClick={function() {working = false}}>
-    <svelte:fragment slot="title">{$_('generic.error')}</svelte:fragment>
-    {$_('settings.staticGtfsFeedSetting.dialog.errors.failed')}
+    <Dialog opened={working && error.length > 0} onBackdropClick={function() {working = false}}>
+        <svelte:fragment slot="title">{$_('generic.error')}</svelte:fragment>
+        {$_('settings.staticGtfsFeedSetting.dialog.errors.failed')}
 
-    <Block strong>
-        {error}
-    </Block>
+        <Block strong>
+            {error}
+        </Block>
 
-    <svelte:fragment slot="buttons">
-        <DialogButton onClick={function() {working = false}} strong>{$_('generic.confirm')}</DialogButton>
-    </svelte:fragment>
-</Dialog>
+        <svelte:fragment slot="buttons">
+            <DialogButton onClick={function() {working = false}} strong>{$_('generic.confirm')}</DialogButton>
+        </svelte:fragment>
+    </Dialog>
+</div>
