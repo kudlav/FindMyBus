@@ -186,9 +186,8 @@ export async function fetchStaticGtfs(url: string, onProgress: (progress: number
             ...baseHttpOptions,
             responseType: 'blob'
         });
-        const zipData = base64ToUint8Array(response.data);
+        zipData = base64ToUint8Array(response.data);
         console.log(`GTFS static data loaded. Size: ${zipData.byteLength / (1024 * 1024)} MB`);
-        return zipData;
     } else {
         const tmpFile: GetUriOptions = {
             directory: Directory.Cache,
