@@ -1,5 +1,4 @@
 import { Filesystem, Directory, Encoding } from "@capacitor/filesystem";
-import { Capacitor } from "@capacitor/core";
 
 type ChunkDataMetadata = {
     dataTypeVersion: 0;
@@ -7,48 +6,23 @@ type ChunkDataMetadata = {
     chunkSize: number;
 }
 
-const platform: 'web' | 'android' | 'ios' | string = Capacitor.getPlatform();
-
 export async function saveData(key: string, data: string) {
-    if (platform === 'web') {
-        // On web, we store the data in localStorage, using the
-        // key as the... key
-        localStorage.setItem(key, data);
-    } else if (platform === 'android') {
-        // On Android, we store the data in files, using the key
-        // as the filename
-        await Filesystem.writeFile({
-            directory: Directory.Data,
-            path: key,
-            data: data,
-            encoding: Encoding.UTF8,
-            recursive: true
-        });
-    } else {
-        throw new Error("Unsupported platform");
-    }
+    await Filesystem.writeFile({
+        directory: Directory.Data,
+        path: key,
+        data: data,
+        encoding: Encoding.UTF8,
+        recursive: true
+    });
 }
 
 export async function loadData(key: string): Promise<string> {
-    if (platform === 'web') {
-        // On web, we store the data in localStorage, using the
-        // key as the... key
-        const value = localStorage.getItem(key);
-        if (!value) {throw new Error("Data not found")};
-        return value;
-    } else if (platform === 'android') {
-        // On Android, we store the data in files, using the key
-        // as the filename
-        const value = await Filesystem.readFile({
-            directory: Directory.Data,
-            path: key,
-            encoding: Encoding.UTF8,
-        });
-
-        return value.data as string;
-    } else {
-        throw new Error("Unsupported platform");
-    }
+    const value = await Filesystem.readFile({
+        directory: Directory.Data,
+        path: key,
+        encoding: Encoding.UTF8,
+    });
+    return value.data as string;
 }
 
 export async function saveDataInChunks(key: string, data: string) {
