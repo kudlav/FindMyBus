@@ -4,6 +4,7 @@ const config: CapacitorConfig = {
   appId: 'cz.kudlav.gtfsrealtimemap',
   appName: 'FindMyBus',
   webDir: 'build',
+  overrideUserAgent: 'findmybus-app',
   plugins: {
     SystemBars: {
       insetsHandling: 'disable',
